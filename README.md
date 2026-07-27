@@ -1,16 +1,46 @@
-# React + Vite
+# ExileIQ
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+ExileIQ is an interactive Path of Exile 2 build companion designed to help players identify build weaknesses, prioritize upgrades, and make better use of their currency.
 
-Currently, two official plugins are available:
+## Current Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Interactive build analysis form
+- Build-link validation
+- Upgrade budget selection
+- Damage, defense, balanced, and budget-focused goals
+- Dynamic sample build reports
+- Build score and grade
+- Recommended upgrade priorities
+- Responsive black-and-red interface
+- Loading and error states
 
-## React Compiler
+## Project Status
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+ExileIQ is currently an early front-end MVP.
 
-## Expanding the ESLint configuration
+The current analysis results are generated from demonstration rules and do not yet import or analyze real Path of Exile 2 character data.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Planned Features
+
+- Real character and build importing
+- Equipment and gem analysis
+- Passive-tree review
+- AI-generated upgrade recommendations
+- Crafting guidance
+- Saved builds and user accounts
+- Market and pricing tools
+
+## Built With
+
+- React
+- JavaScript
+- Vite
+- CSS
+- ESLint
+
+## Run Locally
+
+Clone the repository:
+
+```bash
+git clone YOUR-REPOSITORY-URL
