@@ -1,2 +1,1 @@
-# Poe2-Ai-Coach
-Helping Path of Exile 2 players optimize their builds with AI-driven analysis, recommendations, and progression planning.
+POE AI Coach is an AI-powered web application that helps Path of Exile 2 players improve their builds by analyzing gear, passive trees, gems, and character progression. The long-term goal is to provide personalized coaching, upgrade recommendations, crafting assistance, and gameplay insights.
