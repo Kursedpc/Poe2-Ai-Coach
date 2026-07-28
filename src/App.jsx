@@ -49,75 +49,260 @@ function App() {
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
   const [result, setResult] = useState(null);
+  const [level, setLevel] = useState("90");
+  const [life, setLife] = useState("2500");
+  const [energyShield, setEnergyShield] = useState("0");
+  const [fireResistance, setFireResistance] = useState("75");
+  const [coldResistance, setColdResistance] = useState("75");
+  const [lightningResistance, setLightningResistance] = useState("75");
+  const [chaosResistance, setChaosResistance] = useState("0");
+  const [dps, setDps] = useState("100000");
+ function createAnalysis() {
+  const template = analysisTemplates[goal];
 
-  function createAnalysis() {
-    const template = analysisTemplates[goal];
-    const numericBudget = Number(budget);
+  const numericBudget = Number(budget);
+  const numericLevel = Number(level);
+  const numericLife = Number(life);
+  const numericEnergyShield = Number(energyShield);
+  const numericFireResistance = Number(fireResistance);
+  const numericColdResistance = Number(coldResistance);
+  const numericLightningResistance = Number(lightningResistance);
+  const numericChaosResistance = Number(chaosResistance);
+  const numericDps = Number(dps);
 
-    let buildScore = 72;
+  let buildScore = 100;
+  const weaknesses = [];
+  const recommendations = [];
 
-    if (goal === "balanced") {
-      buildScore = 81;
-    } else if (goal === "damage") {
-      buildScore = 76;
-    } else if (goal === "defense") {
-      buildScore = 68;
-    } else if (goal === "budget") {
-      buildScore = 79;
-    }
+  const totalEffectiveHealth = numericLife + numericEnergyShield;
 
-    let budgetMessage;
+  if (numericLevel >= 80 && totalEffectiveHealth < 2500) {
+    buildScore -= 18;
+    weaknesses.push(
+      `Your combined life and energy shield is only ${totalEffectiveHealth.toLocaleString()}, which is low for higher-level content.`,
+    );
 
-    if (numericBudget <= 1) {
-      budgetMessage =
-        "Focus on free passive-tree changes, gems, flasks, and inexpensive rare items.";
-    } else if (numericBudget <= 5) {
-      budgetMessage =
-        "Your budget should be enough for several meaningful equipment upgrades.";
-    } else if (numericBudget <= 20) {
-      budgetMessage =
-        "Prioritize one major upgrade, then use the remaining budget to repair weaker slots.";
-    } else {
-      budgetMessage =
-        "Compare expensive upgrades carefully. High cost does not always mean high value.";
-    }
+    recommendations.push({
+      name: "Increase life or energy shield",
+      cost: "Low–Medium cost",
+      impact: "High impact",
+    });
+  } else if (numericLevel >= 80 && totalEffectiveHealth < 3500) {
+    buildScore -= 10;
+    weaknesses.push(
+      `Your combined life and energy shield is ${totalEffectiveHealth.toLocaleString()}, which may feel weak in endgame content.`,
+    );
 
-    return {
-      score: buildScore,
-      grade:
-        buildScore >= 90
-          ? "S"
-          : buildScore >= 80
-            ? "A"
-            : buildScore >= 70
-              ? "B"
-              : "C",
-      title: template.title,
-      improvement: template.scoreChange,
-      weakness: template.weakness,
-      upgrades: [
-        {
-          priority: 1,
-          name: template.firstUpgrade,
-          cost: numericBudget <= 2 ? "Low cost" : `${Math.max(1, Math.round(numericBudget * 0.5))} Divine`,
-          impact: "High impact",
-        },
-        {
-          priority: 2,
-          name: template.secondUpgrade,
-          cost: numericBudget <= 2 ? "Low cost" : `${Math.max(1, Math.round(numericBudget * 0.3))} Divine`,
-          impact: "Medium impact",
-        },
-        {
-          priority: 3,
-          name: template.thirdUpgrade,
-          cost: "Free–Low cost",
-          impact: "Medium impact",
-        },
-      ],
-      budgetMessage,
-    };
+    recommendations.push({
+      name: "Improve your primary defensive pool",
+      cost: "Medium cost",
+      impact: "High impact",
+    });
   }
+
+  const elementalResistances = [
+    {
+      name: "Fire",
+      value: numericFireResistance,
+    },
+    {
+      name: "Cold",
+      value: numericColdResistance,
+    },
+    {
+      name: "Lightning",
+      value: numericLightningResistance,
+    },
+  ];
+
+  elementalResistances.forEach((resistance) => {
+    if (resistance.value < 75) {
+      const missingAmount = 75 - resistance.value;
+
+      buildScore -= Math.min(15, Math.ceil(missingAmount / 3));
+
+      weaknesses.push(
+        `${resistance.name} resistance is ${missingAmount}% below the 75% target.`,
+      );
+
+      recommendations.push({
+        name: `Increase ${resistance.name.toLowerCase()} resistance`,
+        cost: "Low cost",
+        impact: "High impact",
+      });
+    }
+  });
+
+  if (numericChaosResistance < 0) {
+    buildScore -= 15;
+
+    weaknesses.push(
+      `Chaos resistance is ${numericChaosResistance}%, leaving you vulnerable to chaos damage.`,
+    );
+
+    recommendations.push({
+      name: "Raise chaos resistance above 0%",
+      cost: "Low–Medium cost",
+      impact: "High impact",
+    });
+  } else if (numericChaosResistance < 40) {
+    buildScore -= 6;
+
+    weaknesses.push(
+      `Chaos resistance is only ${numericChaosResistance}%. Improving it would make the build safer.`,
+    );
+
+    recommendations.push({
+      name: "Improve chaos resistance",
+      cost: "Medium cost",
+      impact: "Medium impact",
+    });
+  }
+
+  if (numericLevel >= 80 && numericDps < 50000) {
+    buildScore -= 15;
+
+    weaknesses.push(
+      `Estimated DPS is ${numericDps.toLocaleString()}, which may be low for endgame bosses.`,
+    );
+
+    recommendations.push({
+      name: "Upgrade your weapon, gems, or damage multipliers",
+      cost: "Medium–High cost",
+      impact: "High impact",
+    });
+  } else if (numericLevel >= 80 && numericDps < 100000) {
+    buildScore -= 7;
+
+    weaknesses.push(
+      `Estimated DPS is ${numericDps.toLocaleString()}. Damage upgrades may improve clear speed and bossing.`,
+    );
+
+    recommendations.push({
+      name: "Improve damage scaling",
+      cost: "Medium cost",
+      impact: "Medium impact",
+    });
+  }
+
+  if (goal === "damage" && numericDps < 150000) {
+    buildScore -= 5;
+
+    recommendations.push({
+      name: "Prioritize your highest-value damage upgrade",
+      cost:
+        numericBudget <= 2
+          ? "Low cost"
+          : `${Math.max(1, Math.round(numericBudget * 0.5))} Divine`,
+      impact: "High impact",
+    });
+  }
+
+  if (goal === "defense" && totalEffectiveHealth < 4000) {
+    buildScore -= 5;
+
+    recommendations.push({
+      name: "Invest more heavily in survivability",
+      cost:
+        numericBudget <= 2
+          ? "Low cost"
+          : `${Math.max(1, Math.round(numericBudget * 0.4))} Divine`,
+      impact: "High impact",
+    });
+  }
+
+  buildScore = Math.max(0, Math.min(100, buildScore));
+
+  const fallbackRecommendations = [
+    {
+      name: template.firstUpgrade,
+      cost:
+        numericBudget <= 2
+          ? "Low cost"
+          : `${Math.max(1, Math.round(numericBudget * 0.5))} Divine`,
+      impact: "High impact",
+    },
+    {
+      name: template.secondUpgrade,
+      cost:
+        numericBudget <= 2
+          ? "Low cost"
+          : `${Math.max(1, Math.round(numericBudget * 0.3))} Divine`,
+      impact: "Medium impact",
+    },
+    {
+      name: template.thirdUpgrade,
+      cost: "Free–Low cost",
+      impact: "Medium impact",
+    },
+  ];
+
+  const finalRecommendations = [...recommendations];
+
+  fallbackRecommendations.forEach((recommendation) => {
+    if (
+      finalRecommendations.length < 3 &&
+      !finalRecommendations.some(
+        (existing) => existing.name === recommendation.name,
+      )
+    ) {
+      finalRecommendations.push(recommendation);
+    }
+  });
+
+  let budgetMessage;
+
+  if (numericBudget <= 1) {
+    budgetMessage =
+      "Focus on free passive-tree changes, gems, flasks, and inexpensive rare items.";
+  } else if (numericBudget <= 5) {
+    budgetMessage =
+      "Your budget should be enough for several meaningful equipment upgrades.";
+  } else if (numericBudget <= 20) {
+    budgetMessage =
+      "Prioritize one major upgrade, then use the remaining budget to repair weaker slots.";
+  } else {
+    budgetMessage =
+      "Compare expensive upgrades carefully. High cost does not always mean high value.";
+  }
+
+  return {
+    score: buildScore,
+    grade:
+      buildScore >= 90
+        ? "S"
+        : buildScore >= 80
+          ? "A"
+          : buildScore >= 70
+            ? "B"
+            : buildScore >= 60
+              ? "C"
+              : "D",
+
+    title: template.title,
+
+    improvement:
+      weaknesses.length === 0
+        ? "No major weaknesses detected"
+        : `${weaknesses.length} improvement areas found`,
+
+    weakness:
+      weaknesses.length > 0
+        ? weaknesses[0]
+        : "Your entered stats do not show any major weaknesses.",
+
+    weaknesses,
+
+    upgrades: finalRecommendations
+      .slice(0, 3)
+      .map((upgrade, index) => ({
+        priority: index + 1,
+        ...upgrade,
+      })),
+
+    budgetMessage,
+  };
+}
 
   function handleAnalyze(event) {
     event.preventDefault();
@@ -156,22 +341,42 @@ function App() {
   }
 
   function loadSampleBuild() {
-    setBuildLink(SAMPLE_BUILD);
-    setBudget("5");
-    setGoal("balanced");
-    setError("");
-    setResult(null);
-    setStatus("idle");
-  }
+  setBuildLink(SAMPLE_BUILD);
+  setBudget("5");
+  setGoal("balanced");
+
+  setLevel("88");
+  setLife("2300");
+  setEnergyShield("250");
+  setFireResistance("75");
+  setColdResistance("63");
+  setLightningResistance("75");
+  setChaosResistance("-18");
+  setDps("72000");
+
+  setError("");
+  setResult(null);
+  setStatus("idle");
+}
 
   function resetAnalysis() {
-    setBuildLink("");
-    setBudget("5");
-    setGoal("balanced");
-    setError("");
-    setResult(null);
-    setStatus("idle");
-  }
+  setBuildLink("");
+  setBudget("5");
+  setGoal("balanced");
+
+  setLevel("90");
+  setLife("2500");
+  setEnergyShield("0");
+  setFireResistance("75");
+  setColdResistance("75");
+  setLightningResistance("75");
+  setChaosResistance("0");
+  setDps("100000");
+
+  setError("");
+  setResult(null);
+  setStatus("idle");
+}
 
   return (
     <div className="site-shell">
@@ -293,6 +498,106 @@ function App() {
                 </select>
               </div>
             </div>
+            <div className="stats-heading">
+              <h4>Character stats </h4>
+              <p> Enter your current in-game values.</p>
+            </div>
+
+            <div className="form-row">
+             <div className="form-group">
+               <label htmlFor="level">Character level</label>
+                <input
+      id="level"
+      type="number"
+      min="1"
+      max="100"
+      value={level}
+      onChange={(event) => setLevel(event.target.value)}
+    />
+  </div>
+
+  <div className="form-group">
+    <label htmlFor="life">Life</label>
+    <input
+      id="life"
+      type="number"
+      min="0"
+      value={life}
+      onChange={(event) => setLife(event.target.value)}
+    />
+  </div>
+</div>
+
+<div className="form-row">
+  <div className="form-group">
+    <label htmlFor="energy-shield">Energy shield</label>
+    <input
+      id="energy-shield"
+      type="number"
+      min="0"
+      value={energyShield}
+      onChange={(event) => setEnergyShield(event.target.value)}
+    />
+  </div>
+
+  <div className="form-group">
+    <label htmlFor="dps">Estimated DPS</label>
+    <input
+      id="dps"
+      type="number"
+      min="0"
+      value={dps}
+      onChange={(event) => setDps(event.target.value)}
+    />
+  </div>
+</div>
+
+<div className="form-row">
+  <div className="form-group">
+    <label htmlFor="fire-resistance">Fire resistance</label>
+    <input
+      id="fire-resistance"
+      type="number"
+      value={fireResistance}
+      onChange={(event) => setFireResistance(event.target.value)}
+    />
+  </div>
+
+  <div className="form-group">
+    <label htmlFor="cold-resistance">Cold resistance</label>
+    <input
+      id="cold-resistance"
+      type="number"
+      value={coldResistance}
+      onChange={(event) => setColdResistance(event.target.value)}
+    />
+  </div>
+</div>
+
+<div className="form-row">
+  <div className="form-group">
+    <label htmlFor="lightning-resistance">
+      Lightning resistance
+    </label>
+    <input
+      id="lightning-resistance"
+      type="number"
+      value={lightningResistance}
+      onChange={(event) => setLightningResistance(event.target.value)}
+    />
+  </div>
+
+  <div className="form-group">
+    <label htmlFor="chaos-resistance">Chaos resistance</label>
+    <input
+      id="chaos-resistance"
+      type="number"
+      value={chaosResistance}
+      onChange={(event) => setChaosResistance(event.target.value)}
+    />
+  </div>
+</div>
+
 
             {error && (
               <p className="error-message" role="alert">
@@ -379,11 +684,15 @@ function App() {
                   <span aria-hidden="true">☠</span>
 
                   <div>
-                    <h4>Primary weakness</h4>
-                    <p>{result.weakness}</p>
-                  </div>
-                </div>
+                    <h4>Detected weaknesses</h4>
 
+                    <ul className="weakness-list">
+                    {result.weaknesses.map((weakness, index) => (
+                    <li key={index}>{weakness}</li>
+                  ))}
+                </ul>
+              </div>
+             </div>     
                 <div className="upgrade-section">
                   <h4>Recommended upgrade order</h4>
 
