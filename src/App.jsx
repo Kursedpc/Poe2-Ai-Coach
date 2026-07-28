@@ -57,6 +57,27 @@ function App() {
   const [lightningResistance, setLightningResistance] = useState("75");
   const [chaosResistance, setChaosResistance] = useState("0");
   const [dps, setDps] = useState("100000");
+
+
+  function getStatusClass(statusText) {
+  const normalizedStatus = statusText.toLowerCase();
+
+  if (
+    normalizedStatus === "capped" ||
+    normalizedStatus === "strong"
+  ) {
+    return "status-good";
+  }
+
+  if (
+    normalizedStatus === "needs improvement" ||
+    normalizedStatus === "moderate"
+  ) {
+    return "status-warning";
+  }
+
+  return "status-danger";
+}
  function createAnalysis() {
   const template = analysisTemplates[goal];
 
@@ -378,6 +399,39 @@ function App() {
   setStatus("idle");
 }
 
+
+const effectiveHealth = Number(life) + Number(energyShield);
+
+const healthStatus =
+  effectiveHealth >= 3500
+    ? "Strong"
+    : effectiveHealth >= 2500
+      ? "Needs improvement"
+      : "Critical";
+
+const fireStatus =
+  Number(fireResistance) >= 75 ? "Capped" : "Below target";
+
+const coldStatus =
+  Number(coldResistance) >= 75 ? "Capped" : "Below target";
+
+const lightningStatus =
+  Number(lightningResistance) >= 75 ? "Capped" : "Below target";
+
+const chaosStatus =
+  Number(chaosResistance) < 0
+    ? "Critical"
+    : Number(chaosResistance) < 40
+      ? "Needs improvement"
+      : "Strong";
+
+const dpsStatus =
+  Number(dps) >= 150000
+    ? "Strong"
+    : Number(dps) >= 100000
+      ? "Moderate"
+      : "Needs improvement";
+      
   return (
     <div className="site-shell">
       <header className="navbar">
@@ -684,16 +738,52 @@ function App() {
   <h4>Character stat summary</h4>
 
   <div className="summary-grid">
-    <div className="summary-item">
-      <span>Life + Energy Shield</span>
-      <strong>{Number(life) + Number(energyShield)}</strong>
-      <small>
-        {Number(life) + Number(energyShield) >= 3500
-          ? "Strong"
-          : Number(life) + Number(energyShield) >= 2500
-            ? "Needs improvement"
-            : "Critical"}
-      </small>
+    <div
+  className={`summary-item ${getStatusClass(healthStatus)}`}
+>
+  <span>Life + Energy Shield</span>
+  <strong>{effectiveHealth.toLocaleString()}</strong>
+  <small>{healthStatus}</small>
+</div>
+
+<div
+  className={`summary-item ${getStatusClass(fireStatus)}`}
+>
+  <span>Fire Resistance</span>
+  <strong>{fireResistance}%</strong>
+  <small>{fireStatus}</small>
+</div>
+
+<div
+  className={`summary-item ${getStatusClass(coldStatus)}`}
+>
+  <span>Cold Resistance</span>
+  <strong>{coldResistance}%</strong>
+  <small>{coldStatus}</small>
+</div>
+
+<div
+  className={`summary-item ${getStatusClass(lightningStatus)}`}
+>
+  <span>Lightning Resistance</span>
+  <strong>{lightningResistance}%</strong>
+  <small>{lightningStatus}</small>
+</div>
+
+<div
+  className={`summary-item ${getStatusClass(chaosStatus)}`}
+>
+  <span>Chaos Resistance</span>
+  <strong>{chaosResistance}%</strong>
+  <small>{chaosStatus}</small>
+</div>
+
+<div
+  className={`summary-item ${getStatusClass(dpsStatus)}`}
+>
+  <span>Estimated DPS</span>
+  <strong>{Number(dps).toLocaleString()}</strong>
+  <small>{dpsStatus}</small>
     </div>
 
     <div className="summary-item">
