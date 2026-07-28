@@ -669,6 +669,67 @@ function App() {
                     <strong>{result.improvement}</strong>
                   </div>
 
+                  <div className="character-summary">
+                    <h4>Character stat summary</h4>
+
+                  <div className="summary-grid">
+                    <div className="summary-item">
+                      <span>Life + Energy Shield</span>
+                      <strong>{Number(life) + Number(energyShield)}</strong>
+                      <small>
+                        {Number(life) + Number(energyShield) >= 3500
+                          ? "Strong"
+                          : Number(life) + Number(energyShield) >= 2500
+                            ? "Needs improvement"
+                            : "Critical"}
+                      </small>
+                   </div>
+
+                  <div className="summary-item">
+                      <span>Fire Resistance</span>
+                      <strong>{fireResistance}%</strong>
+                        <small>{Number(fireResistance) >= 75 ? "Capped" : "Below target"}</small>
+                  </div>
+
+    <div className="summary-item">
+      <span>Cold Resistance</span>
+      <strong>{coldResistance}%</strong>
+      <small>{Number(coldResistance) >= 75 ? "Capped" : "Below target"}</small>
+    </div>
+
+    <div className="summary-item">
+      <span>Lightning Resistance</span>
+      <strong>{lightningResistance}%</strong>
+      <small>
+        {Number(lightningResistance) >= 75 ? "Capped" : "Below target"}
+      </small>
+    </div>
+
+    <div className="summary-item">
+      <span>Chaos Resistance</span>
+      <strong>{chaosResistance}%</strong>
+      <small>
+        {Number(chaosResistance) < 0
+          ? "Critical"
+          : Number(chaosResistance) < 40
+            ? "Needs improvement"
+            : "Strong"}
+      </small>
+    </div>
+
+    <div className="summary-item">
+      <span>Estimated DPS</span>
+      <strong>{Number(dps).toLocaleString()}</strong>
+      <small>
+        {Number(dps) >= 150000
+          ? "Strong"
+          : Number(dps) >= 100000
+            ? "Moderate"
+            : "Needs improvement"}
+      </small>
+    </div>
+  </div>
+</div>
                   <div className="stat-card">
                     <span>Available budget</span>
                     <strong>{Number(budget)} Divine</strong>

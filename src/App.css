@@ -808,3 +808,50 @@ footer p:nth-child(2) {
 #roadmap {
   scroll-margin-top: 90px;
 }
+.character-summary {
+  margin: 25px 0;
+}
+
+.character-summary h4 {
+  margin: 0 0 14px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.summary-item {
+  padding: 17px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #101013;
+}
+
+.summary-item span,
+.summary-item small {
+  display: block;
+}
+
+.summary-item span {
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.summary-item strong {
+  color: var(--gold-light);
+  font-size: 1.15rem;
+}
+
+.summary-item small {
+  margin-top: 7px;
+  color: var(--muted);
+}
+
+@media (max-width: 760px) {
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
