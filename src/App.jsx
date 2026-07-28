@@ -663,38 +663,53 @@ function App() {
                   </div>
                 </div>
 
-                <div className="report-stats">
-                  <div className="stat-card">
-                    <span>Estimated improvement</span>
-                    <strong>{result.improvement}</strong>
-                  </div>
+<div className="report-stats">
+  <div className="stat-card">
+    <span>Estimated improvement</span>
+    <strong>{result.improvement}</strong>
+  </div>
 
-                  <div className="character-summary">
-                    <h4>Character stat summary</h4>
+  <div className="stat-card">
+    <span>Available budget</span>
+    <strong>{Number(budget)} Divine</strong>
+  </div>
 
-                  <div className="summary-grid">
-                    <div className="summary-item">
-                      <span>Life + Energy Shield</span>
-                      <strong>{Number(life) + Number(energyShield)}</strong>
-                      <small>
-                        {Number(life) + Number(energyShield) >= 3500
-                          ? "Strong"
-                          : Number(life) + Number(energyShield) >= 2500
-                            ? "Needs improvement"
-                            : "Critical"}
-                      </small>
-                   </div>
+  <div className="stat-card">
+    <span>Upgrade focus</span>
+    <strong>{goal[0].toUpperCase() + goal.slice(1)}</strong>
+  </div>
+</div>
 
-                  <div className="summary-item">
-                      <span>Fire Resistance</span>
-                      <strong>{fireResistance}%</strong>
-                        <small>{Number(fireResistance) >= 75 ? "Capped" : "Below target"}</small>
-                  </div>
+<div className="character-summary">
+  <h4>Character stat summary</h4>
+
+  <div className="summary-grid">
+    <div className="summary-item">
+      <span>Life + Energy Shield</span>
+      <strong>{Number(life) + Number(energyShield)}</strong>
+      <small>
+        {Number(life) + Number(energyShield) >= 3500
+          ? "Strong"
+          : Number(life) + Number(energyShield) >= 2500
+            ? "Needs improvement"
+            : "Critical"}
+      </small>
+    </div>
+
+    <div className="summary-item">
+      <span>Fire Resistance</span>
+      <strong>{fireResistance}%</strong>
+      <small>
+        {Number(fireResistance) >= 75 ? "Capped" : "Below target"}
+      </small>
+    </div>
 
     <div className="summary-item">
       <span>Cold Resistance</span>
       <strong>{coldResistance}%</strong>
-      <small>{Number(coldResistance) >= 75 ? "Capped" : "Below target"}</small>
+      <small>
+        {Number(coldResistance) >= 75 ? "Capped" : "Below target"}
+      </small>
     </div>
 
     <div className="summary-item">
@@ -730,18 +745,8 @@ function App() {
     </div>
   </div>
 </div>
-                  <div className="stat-card">
-                    <span>Available budget</span>
-                    <strong>{Number(budget)} Divine</strong>
-                  </div>
 
-                  <div className="stat-card">
-                    <span>Upgrade focus</span>
-                    <strong>{goal[0].toUpperCase() + goal.slice(1)}</strong>
-                  </div>
-                </div>
-
-                <div className="warning-panel">
+<div className="warning-panel">
                   <span aria-hidden="true">☠</span>
 
                   <div>
