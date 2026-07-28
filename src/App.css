@@ -803,3 +803,8 @@ footer p:nth-child(2) {
 .weakness-list li::marker {
   color: var(--red-bright);
 }
+#analyzer,
+#features,
+#roadmap {
+  scroll-margin-top: 90px;
+}
